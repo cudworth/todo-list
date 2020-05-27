@@ -1,8 +1,5 @@
 
-
 import {uniqueNumeralString} from './library'; //for unique todo & project ID generation
-import {myObject} from './library';
-
 
 const sample_todo = {
     title:'The Odin Project',
@@ -14,57 +11,78 @@ const sample_todo = {
 };
 
 const todo_proto = {
-    ID:null,
     project:null,
     title:null,
     description:null,
-    dueDate:null,
+    due_date:null,
     priority:null,
     notes:null,
     checklist:null,
+    form_fields:['project','title','description','due date','priority','notes','checklist'],
 };
 
 const project_proto = {
-    ID:null,
     title:null,
     todos:[],
 };
 
-const CRUDs = (self) => ({
-    create: (key, value) => self[key] = value,
-    read: (key) => self[key],
-    update: (key, value) => self[key] = value,
-    destroy: (key) => delete self[key],
-});
+const todos_proto = {};
+const projects_proto = {};
 
-const todo_actions = (self) => Object.assign({},CRUDs(self));
-const project_actions = (self) => Object.assign({},CRUDs(self));
-const model_actions = null; //TODO
-
-
+const no_actions = (self) => {};
 
 const myModel = (function(){
-    const self = {};
-    self.projects = {};
-    self.todos = {};
+    const todos = Object.assign({},todos_proto,no_actions);
+    const projects = Object.assign({},projects_proto,no_actions);
 
-    const createTodo = function(){
-        const ID = uniqueNumeralString(Object.keys(todos));
-        const todo = myObject(todo_proto, todo_actions)
-        todo.ID =  ID;
-        self.todos[ID] = todo;
+    //PUBLIC
+    const createTodo = () => _createObj(todos,todo_proto,no_actions);
+    const createProject = () => _createObj(projects,project_proto,no_actions);
+
+    const readProject = (id) => projects[id];
+    const readTodo = (id) => todos[id];
+
+    const updateProject = (id, attributes) => _updateObj(projects, id, attributes);
+    const updateTodo = (id, attributes)=> _updateObj(todos, id, attributes);
+
+    const deleteProject = (id) => delete projects[id];
+    const deleteTodo = (id) => delete todos[id];
+
+    const save = function(){
+        window.localStorage.setItem('todos',JSON.stringify(todos));
+        window.localStorage.setItem('projects',JSON.stringify(projects));
     };
 
-    const createProject = function(){
-        const ID = uniqueNumeralString(Object.keys(projects));
-        const project = myObject(project_proto,project_actions);
-        project.ID = ID;
-        self.projects[ID] = project;        
+    const load = function(){
+        todos = JSON.parse(window.localStorage.getItem('todos'));
+        projects = JSON.parse(window.localStorage.getItem('projects'));
+    };
+
+    //PRIVATE
+    const _createObj = function(group, proto, actions){
+        const obj = Object.assign({},proto,actions);
+        const id = uniqueNumeralString(Object.keys(group));
+        group[id] = obj;
+        return obj;
+    };
+
+    const _updateObj = function(group, id, attributes){
+        Object.keys(attributes).forEach(function(key){
+            group[id].update(key, attributes[key]);
+        });
     };
 
     return {
         createTodo,
         createProject,
+        readTodo,
+        readProject,
+        updateTodo,
+        updateProject,
+        deleteTodo,
+        deleteProject,
+        save,
+        load,
     };
 })();
 

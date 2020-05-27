@@ -16,8 +16,8 @@ const uniqueNumeralString = function(existing){
         str = _getNumStr(num_chars);
         if (!existing.includes(str)){
             break;
-        }
-    }
+        };
+    };
 
     return str;
 };
@@ -31,13 +31,7 @@ const createAndAppendElement = function(parent, type, attributes){
     return child;
 }
 
-const myObject = function(attributes, methods){
-    const self = attributes;
-    return Object.assign(self, methods(self));
-};
-
 export{
     uniqueNumeralString,
-    myObject,
     createAndAppendElement
 }
