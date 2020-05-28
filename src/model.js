@@ -1,6 +1,7 @@
 
 import {uniqueNumeralString} from './library'; //for unique todo & project ID generation
 
+/*
 const sample_todo = {
     title:'The Odin Project',
     description:'Finish todo list project',
@@ -9,6 +10,7 @@ const sample_todo = {
     notes:'',
     checklist:'',
 };
+*/
 
 const todo_proto = {
     project:null,
@@ -18,7 +20,7 @@ const todo_proto = {
     priority:null,
     notes:null,
     checklist:null,
-    form_fields:['project','title','description','due date','priority','notes','checklist'],
+    fields:['project','title','description','due date','priority','notes','checklist'],
 };
 
 const project_proto = {
@@ -26,21 +28,19 @@ const project_proto = {
     todos:[],
 };
 
-const todos_proto = {};
-const projects_proto = {};
-
-const no_actions = (self) => {};
-
 const myModel = (function(){
-    const todos = Object.assign({},todos_proto,no_actions);
-    const projects = Object.assign({},projects_proto,no_actions);
+    const todos = {};
+    const projects = {};
 
     //PUBLIC
-    const createTodo = () => _createObj(todos,todo_proto,no_actions);
-    const createProject = () => _createObj(projects,project_proto,no_actions);
+    const createTodo = () => _createObj(todos, todo_proto);
+    const createProject = () => _createObj(projects, project_proto);
 
     const readProject = (id) => projects[id];
     const readTodo = (id) => todos[id];
+
+    const readProjects = () => projects;
+    const readTodos = () => todos;
 
     const updateProject = (id, attributes) => _updateObj(projects, id, attributes);
     const updateTodo = (id, attributes)=> _updateObj(todos, id, attributes);
@@ -59,16 +59,15 @@ const myModel = (function(){
     };
 
     //PRIVATE
-    const _createObj = function(group, proto, actions){
-        const obj = Object.assign({},proto,actions);
+    const _createObj = function(group, proto){
         const id = uniqueNumeralString(Object.keys(group));
-        group[id] = obj;
-        return obj;
+        group[id] = Object.assign({}, proto);
+        return id;
     };
 
     const _updateObj = function(group, id, attributes){
         Object.keys(attributes).forEach(function(key){
-            group[id].update(key, attributes[key]);
+            group[id][key] = attributes[key];
         });
     };
 
@@ -77,6 +76,8 @@ const myModel = (function(){
         createProject,
         readTodo,
         readProject,
+        readTodos,
+        readProjects,
         updateTodo,
         updateProject,
         deleteTodo,
@@ -85,7 +86,6 @@ const myModel = (function(){
         load,
     };
 })();
-
 
 export{
     myModel,

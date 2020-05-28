@@ -4,23 +4,32 @@ import {createAndAppendElement} from './library';
 const myView = (function(){
     const self = {};
 
-    const init = function(model){
+    //const init = function(model){
         self.parent = document.body;
         self.root = createAndAppendElement(self.parent,'div',{id:'root',class:'root'});
         self.navbar = createAndAppendElement(self.root,'div',{id:'navbar',class:'navbar'});
         self.content = createAndAppendElement(self.root, 'div',{id:'content',class:'content'});
+    //};
+
+    const renderItem = function(obj){
+        self.content.innerHTML = '';
+        const fields = obj['fields'];
+        const ol = createAndAppendElement(self.content, 'ol', {});
+        fields.forEach(function(field){
+            const li = createAndAppendElement(ol, 'li', {});
+            li.textContent = `${field}: ${obj[field]}`;
+        });
     };
 
-    const renderItem = function(item){
+    const renderGroup = function(group){
         self.content.innerHTML = '';
-        console.log(item);
-    };
-
-    const renderList = function(list){
-        self.content.innerHTML = '';
-        Object.keys(list).forEach(function(key){
+        Object.keys(group).forEach(function(item){
             const card = createAndAppendElement(self.content, 'div',{})
-            card.textContent = list[key]
+            const fields = group[item]['fields'];
+            fields.forEach(function(field){
+                const span = createAndAppendElement(card, 'span', {});
+                span.textContent = `${field}: ${group[item][field]}`;
+            });
         });
     };
 
@@ -48,13 +57,13 @@ const myView = (function(){
         link.addEventListener('click',fn);
     };
 
-    init();
+   // init();
 
     return {
         createNavLink,
         renderForm,
         renderItem,
-        renderList,
+        renderGroup,
     };
 
 
