@@ -14,7 +14,6 @@ const todo_proto = {
 
 const project_proto = {
     title:null,
-    todos:{},
 };
 
 const Model = (function(){
@@ -32,6 +31,7 @@ const Model = (function(){
 
     const createProject = function(){
         const project_id = _createObject(projects, project_proto);
+        setProjectAttributes(project_id,{todos:{}});
         return project_id;
     };
 
@@ -94,6 +94,8 @@ const Model = (function(){
         });
         return obj;
     };
+
+    const _getprojects = () => projects;
 
     init();
 
