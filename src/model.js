@@ -70,20 +70,36 @@ const Model = (function(){
     };
 
     const deleteTodo = function(project_id, todo_id){
-        delete projects[project_id]['todos'][todo_id];
+        Object.keys(links).forEach(function(key){
+            if(links[key].includes(todo_id)){
+                const index = links[key].indexOf(todo_id);
+                links[key].splice(index,1);
+            };
+        });
+        delete todos[todo_id];
     };
     
     const deleteProject = function(project_id){
+        const todos = links[project_id];
+        todos.forEach((todo) => delete todos[todo]);
+        delete links[project_id];
         delete projects[project_id];
+        delete links[project_id];
     };
 
     //PRIVATE
     const _save = function(){
         window.localStorage.setItem('projects',JSON.stringify(projects));
+        window.localStorage.setItem('todos',JSON.stringify(todos));
+        window.localStorage.setItem('links',JSON.stringify(links));
+
+
     };
 
     const _load = function(){
         projects = JSON.parse(window.localStorage.getItem('projects'));
+        todos = JSON.parse(window.localStorage.getItem('todos'));
+        links = JSON.parse(window.localStorage.getItem('links'));
     };
 
     const _createObject = function(group, proto){
