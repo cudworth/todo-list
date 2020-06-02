@@ -41,18 +41,18 @@ const Controller = (function(){
         const keys = ['title','due_date','priority'];
         const todo_ids = Model.getTodos(project_id);
         todo_ids.forEach((todo_id) => {
-            const values = Model.getTodoAttributes(project_id,todo_id,keys);
-            View.drawCard(keys,values,viewTodo.bind(null,project_id,todo_id));
+            const values = Model.getTodoAttributes(todo_id,keys);
+            View.drawCard(keys,values,viewTodo.bind(null,todo_id));
         });
     };
 
     
-    const viewTodo = function(project_id, todo_id){
+    const viewTodo = function(todo_id){
         View.clear();
-        const title = Model.getTodoAttributes(project_id,todo_id,['title']);
+        const title = Model.getTodoAttributes(todo_id,['title']);
         View.setHeader(`Viewing Todo: ${title}`);
         const keys = ['title','description','due_date','priority','notes','checklist'];
-        const values = Model.getTodoAttributes(project_id,todo_id,keys);
+        const values = Model.getTodoAttributes(todo_id,keys);
         View.drawCard(keys,values,() => null);
     };
 
@@ -82,8 +82,8 @@ const Controller = (function(){
     const createTodo = function(project_id){
         const attributes = View.readForm();
         const todo_id = Model.createTodo(project_id);
-        Model.setTodoAttributes(project_id,todo_id,attributes);
-        viewTodo(project_id, todo_id);
+        Model.setTodoAttributes(todo_id,attributes);
+        viewTodo(todo_id);
     };
 
     return {

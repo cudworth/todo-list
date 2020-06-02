@@ -18,6 +18,8 @@ const project_proto = {
 
 const Model = (function(){
     let projects = {};
+    let links = {};
+    let todos = {};
 
     const init = function(){
         (window.localStorage.getItem('projects'))? _load(): _save();
@@ -25,18 +27,20 @@ const Model = (function(){
 
     //PUBLIC
     const createTodo = function(project_id){
-        const todo_id = _createObject(projects[project_id]['todos'], todo_proto);
+        const todo_id = _createObject(todos, todo_proto);
+        links[project_id].push(todo_id);
         return todo_id;
     };
 
     const createProject = function(){
         const project_id = _createObject(projects, project_proto);
         setProjectAttributes(project_id,{todos:{}});
+        links[project_id] = [];
         return project_id;
     };
 
-    const getTodoAttributes = function(project_id, todo_id, attributes){
-        const todo = projects[project_id]['todos'][todo_id];
+    const getTodoAttributes = function(todo_id, attributes){
+        const todo = todos[todo_id];
         const arr = [];
         attributes.forEach(function(attribute){
             arr.push(todo[attribute]);
@@ -55,14 +59,14 @@ const Model = (function(){
 
     const getProjects = () => Object.keys(projects);
 
-    const getTodos = (project_id) => Object.keys(projects[project_id]['todos']);
+    const getTodos = (project_id) => links[project_id];
 
     const setProjectAttributes = function(project_id, attributes){
         _updateObject(projects[project_id], attributes);
     };
 
-    const setTodoAttributes = function(project_id, todo_id, attributes){
-        _updateObject(projects[project_id]['todos'][todo_id], attributes);
+    const setTodoAttributes = function(todo_id, attributes){
+        _updateObject(todos[todo_id], attributes);
     };
 
     const deleteTodo = function(project_id, todo_id){
