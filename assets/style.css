@@ -3,3 +3,23 @@
     height:100vh;
     background-color: white;
 }
+
+.card:hover{
+    text-decoration: underline;
+}
+
+.navbar{
+    margin:24px;
+}
+
+.navlink{
+    margin:24px;
+}
+
+.content{
+    margin:24px;
+}
+
+button{
+    margin:24px;
+}
