@@ -1,25 +1,62 @@
-#root{
+
+html{
+    background-color: rebeccapurple;
     width:100vw;
     height:100vh;
+    position: relative;
+}
+
+#root{
+    position: absolute;
+    left:50%;
+    top:50%;
+    transform: translate(-50%,-50%);  
+    width:98%;
+    height:98%;
     background-color: white;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.card{
+    border-top: 2px solid lightgray;
+    border-bottom: 2px solid lightgray;
+    margin:6px;
 }
 
 .card:hover{
-    text-decoration: underline;
+    border-top: 2px solid slateblue;
+    border-bottom: 2px solid slateblue;
+    cursor: pointer;
 }
 
-.navbar{
-    margin:24px;
+#navbar{
 }
 
 .navlink{
-    margin:24px;
+    display:inline-block;
+    padding:24px;
 }
 
-.content{
-    margin:24px;
+.navlink:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#header{
+    font-size: 24px;
+    font-weight: 700;
+    padding:24px;
+}
+
+#content{
+    padding-inline:24px;
 }
 
 button{
-    margin:24px;
+    margin:12px;
+}
+
+span{
+    display:inline-block;
+    padding:12px;
 }

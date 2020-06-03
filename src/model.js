@@ -17,18 +17,25 @@ const project_proto = {
 };
 
 const Model = (function(){
-    let projects = {};
-    let links = {};
-    let todos = {};
-
-    const init = function(){
-        (window.localStorage.getItem('projects'))? _load(): _save();
+    let projects;
+    let links;
+    let todos;
+    
+    if (0 == window.localStorage.length){
+        projects = {};
+        links = {};
+        todos = {};
+    } else {
+        projects = JSON.parse(window.localStorage.getItem('projects'));
+        todos = JSON.parse(window.localStorage.getItem('todos'));
+        links = JSON.parse(window.localStorage.getItem('links'));
     };
 
     //PUBLIC
     const createTodo = function(project_id){
         const todo_id = _createObject(todos, todo_proto);
         links[project_id].push(todo_id);
+        _save();
         return todo_id;
     };
 
@@ -36,6 +43,7 @@ const Model = (function(){
         const project_id = _createObject(projects, project_proto);
         setProjectAttributes(project_id,{todos:{}});
         links[project_id] = [];
+        _save();
         return project_id;
     };
 
@@ -63,13 +71,15 @@ const Model = (function(){
 
     const setProjectAttributes = function(project_id, attributes){
         _updateObject(projects[project_id], attributes);
+        _save();
     };
 
     const setTodoAttributes = function(todo_id, attributes){
         _updateObject(todos[todo_id], attributes);
+        _save();
     };
 
-    const deleteTodo = function(project_id, todo_id){
+    const deleteTodo = function(todo_id){
         Object.keys(links).forEach(function(key){
             if(links[key].includes(todo_id)){
                 const index = links[key].indexOf(todo_id);
@@ -77,6 +87,7 @@ const Model = (function(){
             };
         });
         delete todos[todo_id];
+        _save();
     };
     
     const deleteProject = function(project_id){
@@ -85,6 +96,7 @@ const Model = (function(){
         delete links[project_id];
         delete projects[project_id];
         delete links[project_id];
+        _save();
     };
 
     //PRIVATE
@@ -92,14 +104,6 @@ const Model = (function(){
         window.localStorage.setItem('projects',JSON.stringify(projects));
         window.localStorage.setItem('todos',JSON.stringify(todos));
         window.localStorage.setItem('links',JSON.stringify(links));
-
-
-    };
-
-    const _load = function(){
-        projects = JSON.parse(window.localStorage.getItem('projects'));
-        todos = JSON.parse(window.localStorage.getItem('todos'));
-        links = JSON.parse(window.localStorage.getItem('links'));
     };
 
     const _createObject = function(group, proto){
@@ -114,10 +118,6 @@ const Model = (function(){
         });
         return obj;
     };
-
-    const _getprojects = () => projects;
-
-    init();
 
     return {
         createTodo,
