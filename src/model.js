@@ -44,27 +44,29 @@ const Model = (function(){
         return project_id;
     };
 
-    const getTodoAttributes = function(todo_id, attributes){
+    const getTodoAttributes = function(todo_id, keys){
         const todo = todos[todo_id];
-        const arr = [];
-        attributes.forEach(function(attribute){
-            arr.push(todo[attribute]);
+        const obj = {};
+        keys.forEach(function(key){
+            obj[key] = todo[key];
         });
-        return arr;
+        return obj;
     };
 
-    const getProjectAttributes = function(project_id, attributes){
+    const getProjectAttributes = function(project_id, keys){
         const project = projects[project_id];
-        const arr = [];
-        attributes.forEach(function(attribute){
-            arr.push(project[attribute]);
+        const obj = {};
+        keys.forEach(function(key){
+            obj[key] = project[key];
         })
-        return arr;
+        return obj;
     };
 
     const getProjects = () => Object.keys(projects);
 
     const getTodos = (project_id) => links[project_id];
+
+    const getProject = (todo_id) => _getKey(links,todo_id);
 
     const setProjectAttributes = function(project_id, attributes){
         _updateObject(projects[project_id], attributes);
@@ -116,6 +118,13 @@ const Model = (function(){
         return obj;
     };
 
+    const _getKey = function(obj, value){
+        Object.keys(obj).forEach(function(key){
+            if(obj[key].includes(value)){return key};
+        });
+        return null;
+    };
+
     return {
         createTodo,
         createProject,
@@ -123,6 +132,7 @@ const Model = (function(){
         getProjectAttributes,
         getTodos,
         getProjects,
+        getProject,
         setTodoAttributes,
         setProjectAttributes,
         deleteTodo,

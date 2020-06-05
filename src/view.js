@@ -12,15 +12,15 @@ const View = (function(){
         self.content = createAndAppendElement(self.root, 'div',{id:'content'});
     };
 
-   const drawForm = function(fields){
+   const drawForm = function(keys, obj){
         const form = createAndAppendElement(self.content,'form',{});
         const ol = createAndAppendElement(form,'ol',{});
-        Object.keys(fields).forEach(function(key){
+        keys.forEach(function(key){
             const li = createAndAppendElement(ol,'li',{});
-            const label = createAndAppendElement(li,'label',{});
-            const formatted_label = titleCase(fields[key]);
-            label.textContent = formatted_label;
-            const input = createAndAppendElement(li,'input',{type:'text',attribute:key});
+            const label = createAndAppendElement(li,'label',{for:key});
+            label.textContent = titleCase(key);
+            const input = createAndAppendElement(li,'input',{name:key,type:'text'});
+            input.value = obj[key];
         });
     };
 
@@ -29,8 +29,8 @@ const View = (function(){
         const form = document.querySelector('form');
         const nodes = form.querySelectorAll('input');
         nodes.forEach(function(node){
-            const attribute = node.getAttribute('attribute');
-            obj[attribute] = node.value;
+            const key = node.getAttribute('name');
+            obj[key] = node.value;
         });
         return obj;
     };
@@ -45,25 +45,22 @@ const View = (function(){
         self.header.textContent = string;
     };
 
-    const drawCard = function(keys, values, click_fn){
+    const drawCard = function(keys, obj, click_fn){
         const card = createAndAppendElement(self.content,'div',{class:'card'});
         card.addEventListener('click',() => click_fn());
-        for (let i = 0; i < keys.length; i++){
+        keys.forEach(function(key){
             const span = createAndAppendElement(card, 'span', {class:'field'});
-            const formatted_key = titleCase(keys[i]);
-            span.textContent = `${formatted_key}: ${values[i]}`;
-        };
+            span.textContent = `${titleCase(key)}: ${obj[key]}`;
+        });
     };
 
-    const drawDetailCard = function(keys, values){
+    const drawDetailCard = function(keys, obj){
         const card = createAndAppendElement(self.content,'div',{class:'detail_card'});
-        for (let i = 0; i < keys.length; i++){
+        keys.forEach(function(key){
             const div = createAndAppendElement(card, 'div', {class:'field'});
-            const formatted_key = titleCase(keys[i]);
-            div.textContent = `${formatted_key}: ${values[i]}`;
-        };
-    };
-        
+            div.textContent = `${titleCase(key)}: ${obj[key]}`;
+        });
+    };        
 
     const drawButton = function(text, click_fn){
         const button = createAndAppendElement(self.content,'button',{});
@@ -74,7 +71,7 @@ const View = (function(){
     const createNavLink = function(text, fn){
         const link = createAndAppendElement(self.navbar,'a',{class:'navlink'});
         link.textContent = text;
-        link.addEventListener('click',fn);
+        link.addEventListener('click',() => fn());
     };
 
     _init();
