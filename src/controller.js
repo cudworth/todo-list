@@ -46,7 +46,7 @@ const Controller = (function(){
 
         const keys = ['title','description','due_date','priority','notes','checklist'];
         const values = Model.getTodoAttributes(todo_id,keys);
-        View.drawCard(keys,values,() => null);
+        View.drawDetailCard(keys,values);
     };
 
     const projectForm = function(){

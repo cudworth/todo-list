@@ -55,8 +55,15 @@ const View = (function(){
         };
     };
 
-
-    //const drawDetailCard = function(){}; //TODO
+    const drawDetailCard = function(keys, values){
+        const card = createAndAppendElement(self.content,'div',{class:'detail_card'});
+        for (let i = 0; i < keys.length; i++){
+            const div = createAndAppendElement(card, 'div', {class:'field'});
+            const formatted_key = titleCase(keys[i]);
+            div.textContent = `${formatted_key}: ${values[i]}`;
+        };
+    };
+        
 
     const drawButton = function(text, click_fn){
         const button = createAndAppendElement(self.content,'button',{});
@@ -78,6 +85,7 @@ const View = (function(){
         readForm,
         setHeader,
         drawCard,
+        drawDetailCard,
         drawButton,
         createNavLink,
     };
