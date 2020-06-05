@@ -1,19 +1,12 @@
 
-html{
-    background-color: rebeccapurple;
-    width:100vw;
-    height:100vh;
-    position: relative;
-}
-
-#root{
-    position: absolute;
-    left:50%;
-    top:50%;
-    transform: translate(-50%,-50%);  
-    width:98%;
-    height:98%;
+#root {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     background-color: white;
+    border: 14px solid rebeccapurple;
     font-family: Arial, Helvetica, sans-serif;
 }
 
