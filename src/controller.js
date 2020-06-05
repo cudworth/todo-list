@@ -27,7 +27,7 @@ const Controller = (function(){
         const title = Model.getProjectAttributes(project_id,['title']);
         View.setHeader(`Project - ${title}`);
         View.drawButton('Delete Project',deleteProject.bind(null,project_id));
-        View.drawButton('Create TODO',todoForm.bind(null,project_id));
+        View.drawButton('Create Todo',todoForm.bind(null,project_id));
 
         const keys = ['title','due_date','priority'];
         const todo_ids = Model.getTodos(project_id);
@@ -52,7 +52,9 @@ const Controller = (function(){
     const projectForm = function(){
         View.clear();
         View.setHeader('Project Form');
-        const fields = ['title'];
+        const fields = {
+            title:'Title',
+        };
         View.drawForm(fields);
         View.drawButton('Submit',createProject);
     };
@@ -60,7 +62,13 @@ const Controller = (function(){
     const todoForm = function(project_id){
         View.clear();
         View.setHeader('Todo Form');
-        const fields = ['title','description','due_date','priority','notes','checklist'];
+        const fields = {
+            title:'Title',
+            description:'Description',
+            due_date:'Due Date',
+            priority:'Priority',
+            notes:'Notes',
+        };
         View.drawForm(fields);
         View.drawButton('Submit',createTodo.bind(null,project_id));
     };

@@ -1,5 +1,5 @@
 
-import {createAndAppendElement} from './library';
+import {createAndAppendElement, titleCase} from './library';
 
 const View = (function(){
     const self = {};
@@ -15,11 +15,12 @@ const View = (function(){
    const drawForm = function(fields){
         const form = createAndAppendElement(self.content,'form',{});
         const ol = createAndAppendElement(form,'ol',{});
-        fields.forEach(function(field){
+        Object.keys(fields).forEach(function(key){
             const li = createAndAppendElement(ol,'li',{});
             const label = createAndAppendElement(li,'label',{});
-            label.textContent = field;
-            const input = createAndAppendElement(li,'input',{type:'text',attribute:field});
+            const formatted_label = titleCase(fields[key]);
+            label.textContent = formatted_label;
+            const input = createAndAppendElement(li,'input',{type:'text',attribute:key});
         });
     };
 
@@ -49,9 +50,13 @@ const View = (function(){
         card.addEventListener('click',() => click_fn());
         for (let i = 0; i < keys.length; i++){
             const span = createAndAppendElement(card, 'span', {class:'field'});
-            span.textContent = `${keys[i]}: ${values[i]}`;
+            const formatted_key = titleCase(keys[i]);
+            span.textContent = `${formatted_key}: ${values[i]}`;
         };
     };
+
+
+    //const drawDetailCard = function(){}; //TODO
 
     const drawButton = function(text, click_fn){
         const button = createAndAppendElement(self.content,'button',{});

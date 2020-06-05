@@ -7,9 +7,6 @@ const todo_proto = {
     due_date:null,
     priority:null,
     notes:null,
-    checklist:null,
-    short_fields:['title','due_date','priority'],
-    long_fields:['title','description','due_date','priority','notes','checklist'],
 };
 
 const project_proto = {
